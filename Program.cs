@@ -1,71 +1,84 @@
-﻿// See https://aka.ms/new-console-template for more information
-using System.Diagnostics;
+﻿using System.Diagnostics;
+// <Fix for Replit vs C#12>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.IO;
 
-int sum = 0;
-var filename = "H:\\CodeKy\\Projects\\Sandbox\\input.txt";
-// filename = "H:\\CodeKy\\Projects\\Sandbox\\test.txt";
-
-Dictionary<int, string> text_to_number = new Dictionary<int, string>{
-	{ 0, "Zero" },
-	{ 1, "One" },
-	{ 2, "Two" },
-	{ 3, "Three" },
-	{ 4, "Four" },
-	{ 5, "Five" },
-	{ 6, "Six" },
-	{ 7, "Seven" },
-	{ 8, "Eight" },
-	{ 9, "Nine" }
-};
-
-Dictionary<int, string> text_to_number_invert = new Dictionary<int, string>(text_to_number);
-foreach (var number in text_to_number_invert.Keys) text_to_number_invert[number] = new string(text_to_number_invert[number].ToCharArray().Reverse().ToArray());
-
-foreach (string line in File.ReadLines(filename))
+class Program
 {
-	Console.Write($"{line} => ");
-	int first_digit = Fracking_Goblins(line, text_to_number);
-	string invert = new string(line.ToCharArray().Reverse().ToArray());
-	int second_digit = Fracking_Goblins(invert, text_to_number_invert);
-	int number_to_add = first_digit * 10 + second_digit;
-	Console.WriteLine(number_to_add);
-	sum += number_to_add;
-}
-
-Console.WriteLine();
-Console.WriteLine($"Sum: {sum}");
-Debug.Assert(sum == 54597 || sum == 54504);
-Environment.Exit(0);
-// </main>
-
-
-
-/* *********************************************************************** */
-int Fracking_Goblins(string input, Dictionary<int, string> text_to_number)
-{
-	while (input.Length > 0) 
+	public static void Main(string[] args)
 	{
-		var chars = input.ToCharArray();
-		int i;
-
-		if ((i = (int)Char.GetNumericValue(chars[0])) >= 0) return i;
-		else if ((i = StarsWithTextNumber(input, text_to_number)) >= 0) return i;	// Comment out this line for part 1
-		else input = input.Substring(1);
-	} 
-
-	throw new Exception("No number found");
-};
+		// </Fix for Replit vs C#12>
 
 
+		int sum = 0;
+		var filename = "H:/CodeKy/Projects/Sandbox/input.txt";
+		// filename = "H:/CodeKy/Projects/Sandbox/test.txt";
 
-int StarsWithTextNumber(string input, Dictionary<int, string> text_to_number)
-{
-	foreach (var number in text_to_number.Keys)
-	{
-		if (input.StartsWith(text_to_number[number], StringComparison.OrdinalIgnoreCase))
+		Dictionary<int, string> textToNumber = new Dictionary<int, string>{
+			{ 0, "Zero" },
+			{ 1, "One" },
+			{ 2, "Two" },
+			{ 3, "Three" },
+			{ 4, "Four" },
+			{ 5, "Five" },
+			{ 6, "Six" },
+			{ 7, "Seven" },
+			{ 8, "Eight" },
+			{ 9, "Nine" }
+			};
+
+		Dictionary<int, string> textToNumberInvert = new Dictionary<int, string>(textToNumber);
+		foreach (var number in textToNumberInvert.Keys) textToNumberInvert[number] = new string(textToNumberInvert[number].ToCharArray().Reverse().ToArray());
+
+		foreach (string line in File.ReadLines(filename))
 		{
-			return number;
+			Console.Write($"{line} => ");
+			int firstDigit = GetFirstNumber(line, textToNumber);
+			string invert = new string(line.ToCharArray().Reverse().ToArray());
+			int secondDigit = GetFirstNumber(invert, textToNumberInvert);
+			int numberToAdd = firstDigit * 10 + secondDigit;
+			Console.WriteLine(numberToAdd);
+			sum += numberToAdd;
 		}
+
+		Console.WriteLine();
+		Console.WriteLine($"Sum: {sum}");
+		Debug.Assert(sum == 54597 || sum == 54504);
+		Environment.Exit(0);
+		// </main>
+
+
+		/* *********************************************************************** */
+		int GetFirstNumber(string input, Dictionary<int, string> textToNumberDictionary)
+		{
+			while (input.Length > 0)
+			{
+				int i;
+				var chars = input.ToCharArray();
+
+				if ((i = (int)Char.GetNumericValue(chars[0])) >= 0) return i;
+				else if ((i = StartsWithTextNumber(input, textToNumberDictionary)) >= 0) return i;   // Comment out this line for part 1
+				else input = input.Substring(1);
+			}
+
+			throw new Exception("No number found");
+		};
+
+
+
+		int StartsWithTextNumber(string input, Dictionary<int, string> textToNumberDictionary)
+		{
+			foreach (var number in textToNumberDictionary.Keys)
+				if (input.StartsWith(textToNumberDictionary[number], StringComparison.OrdinalIgnoreCase))
+					return number;
+
+			return -1;
+		}
+
+
+		// Fix for Replit vs C#12
 	}
-	return -1;
 }
+// </Fix for Replit vs C#12>

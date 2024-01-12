@@ -13,10 +13,12 @@ class Program
 
 
 		int sum = 0;
-		var filename = "H:/CodeKy/Projects/Sandbox/input.txt";
-		// filename = "H:/CodeKy/Projects/Sandbox/test.txt";
+		var filename = FindDefaultFile("input.txt");
+        // filename =  FindFileInParent("test.txt");
+        Console.WriteLine($"Attempting to read {filename}");
+        Console.WriteLine();
 
-		Dictionary<int, string> textToNumber = new Dictionary<int, string>{
+        Dictionary<int, string> textToNumber = new Dictionary<int, string>{
 			{ 0, "Zero" },
 			{ 1, "One" },
 			{ 2, "Two" },
@@ -75,6 +77,27 @@ class Program
 					return number;
 
 			return -1;
+		}
+
+
+
+		//find filename in parent direct directories or direct subdirectories
+		string FindDefaultFile(string filename, SearchOption searchOption = SearchOption.AllDirectories)
+		{
+			string pushd = Directory.GetCurrentDirectory();
+			string[] files = Directory.GetFiles(Directory.GetCurrentDirectory(), filename, searchOption);
+			if (files.Length == 0)
+			{
+				Directory.SetCurrentDirectory("..");
+				string value = FindDefaultFile(filename, SearchOption.TopDirectoryOnly);
+				Directory.SetCurrentDirectory(pushd);
+				return value;
+			}
+			else
+			{
+				Directory.SetCurrentDirectory(pushd);
+				return files[0];
+			}
 		}
 
 

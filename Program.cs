@@ -14,8 +14,8 @@ class Program
 
 		int sum = 0;
 		var filename = FindDefaultFile("input.txt");
-        // filename =  FindFileInParent("test.txt");
-        Console.WriteLine($"Attempting to read {filename}");
+		// filename =  FindDefaultFile("test.txt");
+		Console.WriteLine($"Attempting to read {filename}");
         Console.WriteLine();
 
         Dictionary<int, string> textToNumber = new Dictionary<int, string>{
